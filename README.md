@@ -46,7 +46,6 @@ It does not render locally. Local rendering remains in the main repo CLI and ser
 ## Development
 
 ```bash
-cd github-action
 npm install
 npm test
 npm run build
