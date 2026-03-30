@@ -35,4 +35,4 @@ outputs:
     description: Number of failed preview renders.
 runs:
   using: node20
-  main: dist/src/main.js
+  main: dist/index.js

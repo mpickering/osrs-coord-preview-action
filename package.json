@@ -8,7 +8,9 @@
     "node": ">=20"
   },
   "scripts": {
-    "build": "tsc -p tsconfig.json",
+    "build": "npm run build:ts && npm run build:bundle",
+    "build:ts": "tsc -p tsconfig.json",
+    "build:bundle": "ncc build dist/src/main.js -o dist",
     "test": "node --test --import tsx test/*.test.ts"
   },
   "dependencies": {
@@ -17,6 +19,7 @@
   },
   "devDependencies": {
     "@types/node": "^24.0.0",
+    "@vercel/ncc": "^0.38.4",
     "tsx": "^4.20.3",
     "typescript": "^5.8.3"
   }

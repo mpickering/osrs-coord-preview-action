@@ -59,3 +59,5 @@ npm install
 npm test
 npm run build
 ```
+
+`npm run build` compiles the TypeScript sources and bundles the published action entrypoint into `dist/index.js`.
