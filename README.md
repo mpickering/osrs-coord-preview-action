@@ -2,8 +2,6 @@
 
 This folder contains the standalone GitHub Action client for `osrs-coordinate-preview`.
 
-It is intentionally self-contained so it can be moved into its own repository later.
-
 ## What it does
 
 The action:
