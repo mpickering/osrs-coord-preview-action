@@ -17,11 +17,14 @@ It does not render locally. Local rendering remains in the main repo CLI and ser
 
 | Name | Type | Required | Notes |
 | --- | --- | --- | --- |
-| `coordinates` | `string` | Yes | JSON array of coordinate items. |
+| `coordinates` | `string` | Conditionally | JSON array of coordinate items. Takes precedence over `coordinates-file` when both are set. |
+| `coordinates-file` | `string` | Conditionally | Relative or absolute path to a file containing the JSON array payload. |
 | `renderer-url` | `string` | No | Full `POST /render` endpoint. Defaults to the public hosted service for this project. |
 | `comment` | `boolean` | No | Enable PR comment creation/update. Default `false`. |
 | `github-token` | `string` | No | Needed when `comment` is `true`. Usually `${{ github.token }}`. |
 | `output-dir` | `string` | No | Directory where `manifest.json` is written. Default `.osrs-coordinate-preview`. |
+
+Provide either `coordinates` or `coordinates-file`.
 
 ## Outputs
 
@@ -37,6 +40,14 @@ It does not render locally. Local rendering remains in the main repo CLI and ser
 - uses: mpickering/osrs-coordinate-preview-action@v1
   with:
     coordinates: ${{ steps.coords.outputs.coordinates }}
+    comment: "true"
+    github-token: ${{ github.token }}
+```
+
+```yaml
+- uses: mpickering/osrs-coordinate-preview-action@v1
+  with:
+    coordinates-file: .github/osrs/coordinates.json
     comment: "true"
     github-token: ${{ github.token }}
 ```

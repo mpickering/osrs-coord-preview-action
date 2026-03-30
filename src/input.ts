@@ -1,4 +1,41 @@
+import fs from "node:fs/promises";
+import path from "node:path";
+
 const COORDINATE_PATTERN = /^(-?\d+)\/(-?\d+)\/(-?\d+)$/;
+
+export interface CoordinateInputOptions {
+  coordinatesRaw?: string;
+  coordinatesFile?: string;
+}
+
+export async function resolveCoordinatesPayload(options: CoordinateInputOptions): Promise<string> {
+  const coordinatesRaw = options.coordinatesRaw?.trim();
+  const coordinatesFile = options.coordinatesFile?.trim();
+
+  if (coordinatesRaw) {
+    return coordinatesRaw;
+  }
+
+  if (!coordinatesFile) {
+    throw new Error("One of the inputs 'coordinates' or 'coordinates-file' must be provided.");
+  }
+
+  const filePath = path.resolve(process.cwd(), coordinatesFile);
+
+  let fileContents: string;
+  try {
+    fileContents = await fs.readFile(filePath, "utf8");
+  } catch (error) {
+    throw new Error(`Failed to read coordinates file '${coordinatesFile}': ${(error as Error).message}`);
+  }
+
+  const trimmed = fileContents.trim();
+  if (!trimmed) {
+    throw new Error(`Coordinates file '${coordinatesFile}' is empty.`);
+  }
+
+  return trimmed;
+}
 
 export function validateCoordinatesPayload(raw: string): void {
   let parsed: unknown;

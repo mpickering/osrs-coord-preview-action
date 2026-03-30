@@ -1,9 +1,14 @@
 import * as core from "@actions/core";
 import { runAction } from "./action.js";
+import { resolveCoordinatesPayload } from "./input.js";
 async function main() {
     try {
+        const coordinatesRaw = await resolveCoordinatesPayload({
+            coordinatesRaw: core.getInput("coordinates"),
+            coordinatesFile: core.getInput("coordinates-file")
+        });
         await runAction({
-            coordinatesRaw: core.getInput("coordinates", { required: true }),
+            coordinatesRaw,
             comment: core.getBooleanInput("comment"),
             rendererUrl: core.getInput("renderer-url") || "https://osrs-coordinate-preview-nt7ywvsdgq-nw.a.run.app/render",
             token: core.getInput("github-token") || process.env.GITHUB_TOKEN,

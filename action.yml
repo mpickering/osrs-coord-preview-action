@@ -6,8 +6,11 @@ branding:
   color: blue
 inputs:
   coordinates:
-    description: JSON array of objects containing coordinate, plus optional id, label, and source fields.
-    required: true
+    description: JSON array of objects containing coordinate, plus optional id, label, and source fields. Takes precedence over coordinates-file when both are set.
+    required: false
+  coordinates-file:
+    description: Path to a file containing the JSON array payload for coordinates.
+    required: false
   comment:
     description: Post or update a pull request comment summarizing the rendered previews.
     required: false
