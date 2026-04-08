@@ -1,6 +1,6 @@
 import test from "node:test";
 import assert from "node:assert/strict";
-import { buildCommentBody } from "../src/comment.js";
+import { buildCommentBody, buildSummaryBody } from "../src/comment.js";
 test("buildCommentBody includes image urls", () => {
     const manifest = {
         tileBaseUrl: "remote-renderer",
@@ -22,5 +22,26 @@ test("buildCommentBody includes image urls", () => {
     const body = buildCommentBody(manifest);
     assert.match(body, /Step 1/);
     assert.match(body, /storage\.googleapis\.com\/example-bucket/);
+    assert.match(body, /width="220"/);
+    assert.match(body, /height="220"/);
+});
+test("buildSummaryBody omits the comment marker", () => {
+    const manifest = {
+        tileBaseUrl: "remote-renderer",
+        generatedAt: new Date().toISOString(),
+        renderCount: 0,
+        failedCount: 1,
+        items: [
+            {
+                status: "failure",
+                id: "step-1",
+                coordinate: "3200/3200/0",
+                error: "bad tile"
+            }
+        ]
+    };
+    const body = buildSummaryBody(manifest);
+    assert.doesNotMatch(body, /osrs-coordinate-preview/);
+    assert.match(body, /failed: bad tile/);
 });
 //# sourceMappingURL=comment.test.js.map

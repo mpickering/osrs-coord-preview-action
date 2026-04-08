@@ -15,24 +15,50 @@ inputs:
     description: Post or update a pull request comment summarizing the rendered previews.
     required: false
     default: "false"
+  pr-number:
+    description: Pull request number to comment on. When omitted, the comment action uses the current pull request context.
+    required: false
   renderer-url:
     description: Full URL of the remote render endpoint.
     required: false
     default: https://osrs-coordinate-preview-nt7ywvsdgq-nw.a.run.app/render
   github-token:
-    description: GitHub token used for optional pull request commenting.
+    description: GitHub token used for optional pull request commenting. Defaults to github.token when omitted.
     required: false
   output-dir:
-    description: Directory where the local manifest is written.
+    description: Directory where the local manifest and markdown outputs are written.
     required: false
     default: .osrs-coordinate-preview
 outputs:
   manifest_path:
     description: Path to the generated manifest.json file.
+    value: ${{ steps.render.outputs.manifest_path }}
+  comment_body_path:
+    description: Path to the generated comment markdown file.
+    value: ${{ steps.render.outputs.comment_body_path }}
+  summary_path:
+    description: Path to the generated summary markdown file.
+    value: ${{ steps.render.outputs.summary_path }}
   render_count:
     description: Number of successfully rendered previews.
+    value: ${{ steps.render.outputs.render_count }}
   failed_count:
     description: Number of failed preview renders.
+    value: ${{ steps.render.outputs.failed_count }}
 runs:
-  using: node20
-  main: dist/index.js
+  using: composite
+  steps:
+    - id: render
+      uses: ./render
+      with:
+        coordinates: ${{ inputs.coordinates }}
+        coordinates-file: ${{ inputs.coordinates-file }}
+        renderer-url: ${{ inputs.renderer-url }}
+        output-dir: ${{ inputs.output-dir }}
+    - if: ${{ inputs.comment == 'true' }}
+      uses: thollander/actions-comment-pull-request@v3
+      with:
+        github-token: ${{ inputs.github-token || github.token }}
+        file-path: ${{ steps.render.outputs.comment_body_path }}
+        pr-number: ${{ inputs.pr-number }}
+        comment-tag: osrs-coordinate-preview
