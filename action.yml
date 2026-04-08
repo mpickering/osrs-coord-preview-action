@@ -49,12 +49,18 @@ runs:
   using: composite
   steps:
     - id: render
-      uses: ./render
-      with:
-        coordinates: ${{ inputs.coordinates }}
-        coordinates-file: ${{ inputs.coordinates-file }}
-        renderer-url: ${{ inputs.renderer-url }}
-        output-dir: ${{ inputs.output-dir }}
+      # Direct invocation avoids relying on nested local-action resolution.
+      # If GitHub ships the proposed same-repo same-SHA "$/" syntax, this can
+      # become a nested action reference instead:
+      # https://github.com/orgs/community/discussions/26245
+      # uses: $/render
+      shell: bash
+      run: node "$GITHUB_ACTION_PATH/dist/index.js"
+      env:
+        OSRS_COORDINATES: ${{ inputs.coordinates }}
+        OSRS_COORDINATES_FILE: ${{ inputs.coordinates-file }}
+        OSRS_RENDERER_URL: ${{ inputs.renderer-url }}
+        OSRS_OUTPUT_DIR: ${{ inputs.output-dir }}
     - if: ${{ inputs.comment == 'true' }}
       uses: thollander/actions-comment-pull-request@v3
       with:

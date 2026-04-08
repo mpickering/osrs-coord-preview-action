@@ -27570,16 +27570,19 @@ async function requestRemoteRender(rendererUrl, coordinatesRaw) {
 
 
 
+function getActionInput(name, envName) {
+    return core.getInput(name) || process.env[envName] || "";
+}
 async function main() {
     try {
         const coordinatesRaw = await resolveCoordinatesPayload({
-            coordinatesRaw: core.getInput("coordinates"),
-            coordinatesFile: core.getInput("coordinates-file")
+            coordinatesRaw: getActionInput("coordinates", "OSRS_COORDINATES"),
+            coordinatesFile: getActionInput("coordinates-file", "OSRS_COORDINATES_FILE")
         });
         await runAction({
             coordinatesRaw,
-            rendererUrl: core.getInput("renderer-url") || "https://osrs-coordinate-preview-nt7ywvsdgq-nw.a.run.app/render",
-            outputDir: core.getInput("output-dir") || ".osrs-coordinate-preview"
+            rendererUrl: getActionInput("renderer-url", "OSRS_RENDERER_URL") || "https://osrs-coordinate-preview-nt7ywvsdgq-nw.a.run.app/render",
+            outputDir: getActionInput("output-dir", "OSRS_OUTPUT_DIR") || ".osrs-coordinate-preview"
         });
     }
     catch (error) {
