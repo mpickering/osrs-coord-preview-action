@@ -23,6 +23,10 @@ test("buildCommentBody includes image urls", () => {
   };
 
   const body = buildCommentBody(manifest);
+  assert.match(body, /OSRS coordinate preview/);
+  assert.match(body, /🗺️/);
+  assert.match(body, /\[\^source\]: \[Source\]/);
+  assert.match(body, /github\.com\/mpickering\/osrs-coordinate-preview/);
   assert.match(body, /Step 1/);
   assert.match(body, /storage\.googleapis\.com\/example-bucket/);
   assert.match(body, /width="220"/);
@@ -46,6 +50,6 @@ test("buildSummaryBody omits the comment marker", () => {
   };
 
   const body = buildSummaryBody(manifest);
-  assert.doesNotMatch(body, /osrs-coordinate-preview/);
+  assert.doesNotMatch(body, /<!-- osrs-coordinate-preview -->/);
   assert.match(body, /failed: bad tile/);
 });

@@ -27435,12 +27435,13 @@ const external_node_path_namespaceObject = __WEBPACK_EXTERNAL_createRequire(impo
 const COMMENT_MARKER = "<!-- osrs-coordinate-preview -->";
 const COMMENT_IMAGE_WIDTH = 220;
 const COMMENT_IMAGE_HEIGHT = 220;
+const PROJECT_REPO_URL = "https://github.com/mpickering/osrs-coordinate-preview";
 function buildCommentBody(manifest) {
     return [COMMENT_MARKER, buildSummaryBody(manifest)].join("\n");
 }
 function buildSummaryBody(manifest) {
     const lines = [
-        "## OSRS coordinate previews",
+        "## 🗺️ OSRS coordinate preview",
         "",
         `Rendered ${pluralize(manifest.renderCount, "preview")}; ${pluralize(manifest.failedCount, "failure")}.`,
         "",
@@ -27455,6 +27456,7 @@ function buildSummaryBody(manifest) {
             : escapeCell(item.status === "failure" ? `failed: ${item.error}` : "");
         lines.push(`| ${preview} | ${escapeCell(title)} | ${escapeCell(item.coordinate)} | ${escapeCell(source)} |`);
     }
+    lines.push("", `[^source]: [Source](${PROJECT_REPO_URL})`);
     return lines.join("\n");
 }
 function escapeCell(value) {
