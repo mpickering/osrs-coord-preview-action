@@ -22,6 +22,7 @@ test("buildCommentBody includes image urls", () => {
     const body = buildCommentBody(manifest);
     assert.match(body, /OSRS coordinate preview/);
     assert.match(body, /🗺️/);
+    assert.match(body, /Rendered 1 preview; 0 failures\. \[\^source\]/);
     assert.match(body, /\[\^source\]: \[Source\]/);
     assert.match(body, /github\.com\/mpickering\/osrs-coordinate-preview/);
     assert.match(body, /Step 1/);

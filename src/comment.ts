@@ -11,7 +11,7 @@ export function buildCommentBody(manifest: RenderManifest): string {
 
 export function buildSummaryBody(manifest: RenderManifest): string {
   const lines = [
-    "## 🗺️ OSRS coordinate preview",
+    "## 🗺️ OSRS coordinate preview[^source]",
     "",
     `Rendered ${pluralize(manifest.renderCount, "preview")}; ${pluralize(manifest.failedCount, "failure")}.`,
     "",
